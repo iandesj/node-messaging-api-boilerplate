@@ -5,6 +5,8 @@
  */
 
 const home = require('../app/controllers/home');
+const threads = require('../app/controllers/threads');
+const messages = require('../app/controllers/messages');
 
 /**
  * Expose
@@ -12,7 +14,12 @@ const home = require('../app/controllers/home');
 
 module.exports = function(app) {
   app.get('/', home.index);
+  app.get('/api/threads', threads.index);
+  app.post('/api/threads', threads.create);
+  app.get('/api/threads/:threadId',threads.show);
 
+  app.post('/api/messages', messages.create);
+  app.get('/api/threads/:threadId/messages/:messageId', messages.show);
   /**
    * Error handling
    */
