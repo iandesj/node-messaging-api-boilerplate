@@ -12,8 +12,12 @@ exports.create = function(req, res) {
     const message = new Message(req.body.message);
     Thread.findById(mongoose.Types.ObjectId(threadId))
         .then(thread => {
-            thread.messages.push(message);
-            return thread.save();
+            if (thread) {
+                thread.messages.push(message);
+                return thread.save();
+            } else {
+                res.status(400).send({message: 'Bad Request: Thread Not Found'});
+            }
         })
         .then(thread => {
             res.send({
@@ -29,8 +33,13 @@ exports.getOne = function(req, res) {
 
     Thread.findById(mongoose.Types.ObjectId(threadId))
         .then(thread => {
-            const threadMessage = thread.messages.id(mongoose.Types.ObjectId(messageId));
-            res.send(threadMessage);
+            if (thread) {
+                const threadMessage = thread.messages.id(mongoose.Types.ObjectId(messageId));
+                if (threadMessage) res.send(threadMessage);
+                else res.status(404).send({message: 'Not Found'})
+            } else {
+                res.status(400).send({message: 'Bad Request: Thread Not Found'});
+            }
         });
 };
 
@@ -41,10 +50,13 @@ exports.update = function(req, res) {
 
     Thread.findById(mongoose.Types.ObjectId(threadId))
         .then(thread => {
-            const threadMessage = thread.messages.id(mongoose.Types.ObjectId(messageId));
-            threadMessage.readBy = message.readBy;
-
-            return thread.save();
+            if (thread) {
+                const threadMessage = thread.messages.id(mongoose.Types.ObjectId(messageId));
+                threadMessage.readBy = message.readBy;
+                return thread.save();
+            } else {
+                res.status(400).send({message: 'Bad Request: Thread Not Found'});
+            }
         })
         .then(thread => {
             res.send(thread.messages);

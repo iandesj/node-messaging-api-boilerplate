@@ -26,6 +26,16 @@ exports.getOne = function(req, res) {
 
     Thread.findById(mongoose.Types.ObjectId(threadId))
         .then(thread => {
-            res.send(thread);
+            if (thread) res.send(thread);
+            else res.status(404).send({message: 'Not Found'});
         });
-}
+};
+
+exports.delete = function(req, res) {
+    const threadId = req.params.threadId;
+
+    Thread.deleteOne({ _id: mongoose.Types.ObjectId(threadId) })
+        .then(thread => {
+            res.send({message: "Thread removed"});
+        });
+};
