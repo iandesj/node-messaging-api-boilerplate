@@ -85,15 +85,15 @@ exports.delete = function(req, res) {
 
   Thread.findById(mongoose.Types.ObjectId(threadId))
     .then(thread => {
-      thread.messages.id(mongoose.Types.ObjectId(messageId)).remove();
-
-      return thread.save();
+      const threadMessage = thread.messages.id(
+        mongoose.Types.ObjectId(messageId)
+      );
+      if (threadMessage) {
+        threadMessage.remove();
+        return thread.save();
+      }
     })
-    .then(thread => {
-      thread.messages.sort((a, b) => {
-        new Date(a.createdAt) > new Date(b.createdAt);
-      });
-
-      res.send(thread.messages);
+    .then(() => {
+      res.status(200).send();
     });
 };

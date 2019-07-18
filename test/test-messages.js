@@ -196,7 +196,34 @@ test('Messages PUT /api/threads/:threadId/messages/:messageId 404 Not Found', t 
     .end(t.end);
 });
 
-// TODO: Write DELETE test(s)
+test('Messages DELETE /api/threads/:threadId/messages/:messageId', t => {
+  const url =
+    '/api/threads/' +
+    Fixtures.thread._id.toString() +
+    '/messages/' +
+    Fixtures.thread.messages[0]._id.toString();
+  request(app)
+    .delete(url)
+    .expect(200)
+    .end(() => {
+      request(app)
+        .get(url)
+        .expect(404)
+        .end(t.end);
+    });
+});
+
+test('Messages DELETE /api/threads/:threadId/messages/:messageId Message Does Not Exist And Succeeds', t => {
+  const url =
+    '/api/threads/' +
+    Fixtures.thread._id.toString() +
+    '/messages/' +
+    '54edb381a13ec9142b9bb353';
+  request(app)
+    .delete(url)
+    .expect(200)
+    .end(t.end);
+});
 
 function beforeEach(test, handler) {
   return function tapish(name, listener) {
