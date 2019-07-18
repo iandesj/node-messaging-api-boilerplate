@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 
-const home = require('../app/controllers/home');
 const threads = require('../app/controllers/threads');
 const messages = require('../app/controllers/messages');
 
@@ -13,13 +12,13 @@ const messages = require('../app/controllers/messages');
  */
 
 module.exports = function(app) {
-  app.get('/', home.index);
-  app.get('/api/threads', threads.index);
+  app.get('/api/threads', threads.getAll);
   app.post('/api/threads', threads.create);
-  app.get('/api/threads/:threadId',threads.show);
+  app.get('/api/threads/:threadId',threads.getOne);
 
   app.post('/api/messages', messages.create);
-  app.get('/api/threads/:threadId/messages/:messageId', messages.show);
+  app.get('/api/threads/:threadId/messages/:messageId', messages.getOne);
+  app.put('/api/threads/:threadId/messages/:messageId', messages.update);
   /**
    * Error handling
    */
@@ -35,14 +34,11 @@ module.exports = function(app) {
     }
     console.error(err.stack);
     // error page
-    res.status(500).render('500', { error: err.stack });
+    res.status(500);
   });
 
   // assume 404 since no middleware responded
   app.use(function(req, res) {
-    res.status(404).render('404', {
-      url: req.originalUrl,
-      error: 'Not found'
-    });
+    res.status(404);
   });
 };

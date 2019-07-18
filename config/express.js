@@ -15,7 +15,6 @@ const helmet = require('helmet');
 const mongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const winston = require('winston');
-const helpers = require('view-helpers');
 const config = require('./');
 const pkg = require('../package.json');
 
@@ -53,17 +52,6 @@ module.exports = function(app, passport) {
   // Don't log during tests
   // Logging middleware
   if (env !== 'test') app.use(morgan(log));
-
-  // set views path and default layout
-  app.set('views', config.root + '/app/views');
-  app.set('view engine', 'pug');
-
-  // expose package.json to views
-  app.use(function(req, res, next) {
-    res.locals.pkg = pkg;
-    res.locals.env = env;
-    next();
-  });
 
   // bodyParser should be above methodOverride
   app.use(
@@ -104,9 +92,6 @@ module.exports = function(app, passport) {
 
   // connect flash for flash messages - should be declared after sessions
   app.use(flash());
-
-  // should be declared after session and flash
-  app.use(helpers(pkg.name));
 
   // adds CSRF support
   if (process.env.NODE_ENV !== 'test') {
