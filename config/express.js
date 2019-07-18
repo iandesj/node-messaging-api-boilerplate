@@ -2,7 +2,6 @@
  * Module dependencies.
  */
 
-const express = require('express');
 const session = require('express-session');
 const compression = require('compression');
 const morgan = require('morgan');
