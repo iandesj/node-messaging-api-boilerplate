@@ -9,7 +9,6 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-// const csrf = require('csurf');
 const helmet = require('helmet');
 
 const mongoStore = require('connect-mongo')(session);
@@ -33,9 +32,6 @@ module.exports = function(app, passport) {
       threshold: 512
     })
   );
-
-  // Static files middleware
-  app.use(express.static(config.root + '/public'));
 
   // Use winston on production
   let log;
@@ -92,18 +88,4 @@ module.exports = function(app, passport) {
 
   // connect flash for flash messages - should be declared after sessions
   app.use(flash());
-
-  // adds CSRF support
-  if (process.env.NODE_ENV !== 'test') {
-    /*
-    app.use(csrf());
-
-    // This could be moved to view-helpers :-)
-    app.use(function(req, res, next) {
-      if (req.url.startsWith('/api')) next();
-      res.locals.csrf_token = req.csrfToken();
-      next();
-    });
-    */
-  }
 };

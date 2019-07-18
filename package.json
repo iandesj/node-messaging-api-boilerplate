@@ -1,10 +1,10 @@
 {
-  "name": "node-express-mongoose",
-  "description": "A boilerplate application for node, mongo",
+  "name": "node-messaging-api-boilerplate",
+  "description": "A boilerplate messaging api for node, mongo",
   "version": "1.0.0",
   "author": {
-    "name": "Madhusudhan Srinivasa",
-    "email": "me@madhums.me"
+    "name": "Ian DesJardins",
+    "email": "ians.nerd.mail@gmail.com"
   },
   "engines": {
     "node": ">=10.x"
@@ -23,7 +23,6 @@
     "connect-mongo": "~2.0.3",
     "cookie-parser": "~1.4.4",
     "cross-env": "~5.2.0",
-    "csurf": "1.10.0",
     "dotenv": "~8.0.0",
     "express": "~4.17.0",
     "express-session": "~1.16.1",
@@ -36,7 +35,6 @@
     "passport-local": "~1.0.0",
     "pm2": "~3.5.0",
     "pug": "~2.0.3",
-    "view-helpers": "~0.2.0",
     "winston": "~3.2.1"
   },
   "devDependencies": {
@@ -53,7 +51,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/madhums/node-express-mongoose.git"
+    "url": "git://github.com/iandesj/node-messaging-api-boilerplate.git"
   },
   "keywords": [
     "node",

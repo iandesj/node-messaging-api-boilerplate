@@ -3,7 +3,7 @@ require('dotenv').config();
 module.exports = {
   apps: [
     {
-      name: 'PalmerMessaging',
+      name: 'Messaging',
       script: 'server.js',
 
       // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
