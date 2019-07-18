@@ -26,7 +26,13 @@ exports.getOne = function(req, res) {
 
     Thread.findById(mongoose.Types.ObjectId(threadId))
         .then(thread => {
-            if (thread) res.send(thread);
+            if (thread) {
+                thread.messages.sort((a, b) => {
+                    new Date(a.createdAt) > new Date(b.createdAt)
+                });
+
+                res.send(thread);
+            }
             else res.status(404).send({message: 'Not Found'});
         });
 };

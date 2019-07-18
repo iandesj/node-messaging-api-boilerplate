@@ -59,6 +59,10 @@ exports.update = function(req, res) {
             }
         })
         .then(thread => {
+            thread.messages.sort((a, b) => {
+                new Date(a.createdAt) > new Date(b.createdAt)
+            });
+
             res.send(thread.messages);
         });
 };
@@ -74,6 +78,10 @@ exports.delete = function(req, res) {
             return thread.save();
         })
         .then(thread => {
+            thread.messages.sort((a, b) => {
+                new Date(a.createdAt) > new Date(b.createdAt)
+            });
+
             res.send(thread.messages);
         });
 };

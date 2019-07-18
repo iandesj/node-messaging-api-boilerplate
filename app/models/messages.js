@@ -12,7 +12,7 @@ const Schema = mongoose.Schema;
 const MessageSchema = new Schema({
   content: { type: String, default: '' },
   createdBy: { type: String, default: 'creator' },
-  createdAt: { type: Date, default: new Date() },
+  createdAt: { type: Date, default: Date.now },
   readBy: { type: [String], default: [] }
 });
 
