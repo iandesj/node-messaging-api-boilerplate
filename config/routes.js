@@ -19,6 +19,7 @@ module.exports = function(app) {
   app.post('/api/messages', messages.create);
   app.get('/api/threads/:threadId/messages/:messageId', messages.getOne);
   app.put('/api/threads/:threadId/messages/:messageId', messages.update);
+  app.delete('/api/threads/:threadId/messages/:messageId', messages.delete);
   /**
    * Error handling
    */

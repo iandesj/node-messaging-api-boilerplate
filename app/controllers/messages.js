@@ -50,3 +50,18 @@ exports.update = function(req, res) {
             res.send(thread.messages);
         });
 };
+
+exports.delete = function(req, res) {
+    const threadId = req.params.threadId;
+    const messageId = req.params.messageId;
+
+    Thread.findById(mongoose.Types.ObjectId(threadId))
+        .then(thread => {
+            thread.messages.id(mongoose.Types.ObjectId(messageId)).remove();
+
+            return thread.save();
+        })
+        .then(thread => {
+            res.send(thread.messages);
+        });
+};
