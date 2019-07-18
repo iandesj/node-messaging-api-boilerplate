@@ -12,6 +12,7 @@ exports.create = function(req, res) {
   const message = new Message(req.body.message);
   Thread.findById(mongoose.Types.ObjectId(threadId))
     .then(thread => {
+      console.log('thread', thread);
       if (thread) {
         thread.messages.push(message);
         return thread.save();
@@ -20,10 +21,12 @@ exports.create = function(req, res) {
       }
     })
     .then(thread => {
-      res.send({
-        threadId: thread._id.toString(),
-        messageId: message._id.toString()
-      });
+      if (thread) {
+        res.send({
+          threadId: thread._id.toString(),
+          messageId: message._id.toString()
+        });
+      }
     });
 };
 
@@ -55,18 +58,24 @@ exports.update = function(req, res) {
         const threadMessage = thread.messages.id(
           mongoose.Types.ObjectId(messageId)
         );
-        threadMessage.readBy = message.readBy;
-        return thread.save();
+
+        if (threadMessage) {
+          threadMessage.readBy = message.readBy;
+          return thread.save();
+        } else {
+          res.status(404).send({ message: 'Not Found' });
+        }
       } else {
         res.status(400).send({ message: 'Bad Request: Thread Not Found' });
       }
     })
     .then(thread => {
-      thread.messages.sort((a, b) => {
-        new Date(a.createdAt) > new Date(b.createdAt);
-      });
-
-      res.send(thread.messages);
+      if (thread) {
+        thread.messages.sort((a, b) => {
+          new Date(a.createdAt) > new Date(b.createdAt);
+        });
+        res.send(thread.messages);
+      }
     });
 };
 

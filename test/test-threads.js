@@ -12,6 +12,8 @@ const request = require('supertest');
 const { app } = require('../server');
 const Thread = require('../app/models/thread').Thread;
 
+// begin test hook configuration
+
 test.onFinish(() => process.exit(0));
 
 test = beforeEach(test, assert => {
@@ -33,6 +35,8 @@ before('Before all tests...', assert => {
 after('After all tests...', assert => {
   assert.end();
 });
+
+// end test hook configuration
 
 test('Threads GET /api/threads', t => {
   request(app)
@@ -75,6 +79,16 @@ test('Threads GET /api/threads/:threadId', t => {
     });
 });
 
+test('Threads GET /api/threads/:threadId 404 Not Found', t => {
+  request(app)
+    .get('/api/threads/54759eb3c090d83494e2d804')
+    .expect(404)
+    .expect(getRes => {
+      t.equal(getRes.body.message, 'Not Found');
+    })
+    .end(t.end);
+});
+
 test('Threads DELETE /api/threads/:threadId', t => {
   request(app)
     .post('/api/threads')
@@ -87,6 +101,9 @@ test('Threads DELETE /api/threads/:threadId', t => {
       request(app)
         .delete('/api/threads/' + postRes.body._id)
         .expect(200)
+        .expect(delRes => {
+          t.equal(delRes.body.message, 'Thread removed');
+        })
         .end(() => {
           request(app)
             .get('/api/threads')
@@ -97,6 +114,16 @@ test('Threads DELETE /api/threads/:threadId', t => {
             .end(t.end);
         });
     });
+});
+
+test('Threads DELETE /api/threads/:threadId 404 Not Found', t => {
+  request(app)
+    .delete('/api/threads/54759eb3c090d83494e2d804')
+    .expect(404)
+    .expect(getRes => {
+      t.equal(getRes.body.message, 'Not Found');
+    })
+    .end(t.end);
 });
 
 function beforeEach(test, handler) {
