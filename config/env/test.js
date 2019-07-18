@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-  db: process.env.MONGODB_URL || 'mongodb://localhost/my_app_test',
+  db: process.env.MONGODB_URL || 'mongodb://localhost/palmer_messaging',
   facebook: {
     clientID: 'APP_ID',
     clientSecret: 'SECRET',

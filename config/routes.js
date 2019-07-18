@@ -14,8 +14,8 @@ const messages = require('../app/controllers/messages');
 module.exports = function(app) {
   app.post('/api/threads', threads.create);
   app.get('/api/threads', threads.getAll);
-  app.get('/api/threads/:threadId',threads.getOne);
-  app.delete('/api/threads/:threadId',threads.delete);
+  app.get('/api/threads/:threadId', threads.getOne);
+  app.delete('/api/threads/:threadId', threads.delete);
 
   app.post('/api/messages', messages.create);
   app.get('/api/threads/:threadId/messages/:messageId', messages.getOne);

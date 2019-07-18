@@ -41,4 +41,4 @@ MessageSchema.static({});
 
 const Message = mongoose.model('Message', MessageSchema);
 
-module.exports = { Message, MessageSchema  };
+module.exports = { Message, MessageSchema };

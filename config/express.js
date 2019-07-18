@@ -9,7 +9,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const csrf = require('csurf');
+// const csrf = require('csurf');
 const helmet = require('helmet');
 
 const mongoStore = require('connect-mongo')(session);
