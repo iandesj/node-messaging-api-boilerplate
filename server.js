@@ -16,8 +16,8 @@ const fs = require('fs');
 const join = require('path').join;
 const app = require('express')();
 const server = require('http').Server(app);
-
 const io = require('./config/socketio').init(server);
+
 const ioAuthentication = require('./config/socketio').authentication;
 const ioConnection = require('./config/socketio').connection;
 
@@ -56,6 +56,7 @@ connection
 
 function listen() {
   if (app.get('env') === 'test') return;
+
   server.listen(port);
   console.log('Express app started on port ' + port);
 
