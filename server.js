@@ -58,9 +58,7 @@ function listen() {
   console.log('Express app started on port ' + port);
 
   // socket io auth configuration
-  io.use(ioAuthentication)
-  .on('connection', ioConnection);
-
+  io.use(ioAuthentication).on('connection', ioConnection);
 }
 
 function connect() {
