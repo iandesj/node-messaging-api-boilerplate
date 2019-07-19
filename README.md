@@ -10,6 +10,10 @@ A boilerplate application for building a messaging API using express, mongoose a
     cp .env.example .env
     npm start
 
+## Test
+
+    npm run test
+
 ## Docker
 
 You can also use docker for development. Make sure you run npm install on your host machine so that code linting and everything works fine.

@@ -16,7 +16,11 @@ const fs = require('fs');
 const join = require('path').join;
 const app = require('express')();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('./config/socketio').init(server);
+
+const ioAuthentication = require('./config/socketio').authentication;
+const ioConnection = require('./config/socketio').connection;
+
 const mongoose = require('mongoose');
 const passport = require('passport');
 const config = require('./config');
@@ -25,8 +29,6 @@ const models = join(__dirname, 'app/models');
 const port = process.env.PORT || 3000;
 
 const connection = connect();
-const ioAuthentication = require('./config/socketio').authentication;
-const ioConnection = require('./config/socketio').connection;
 
 /**
  * Expose
@@ -54,13 +56,12 @@ connection
 
 function listen() {
   if (app.get('env') === 'test') return;
+
   server.listen(port);
   console.log('Express app started on port ' + port);
 
   // socket io auth configuration
-  io.use(ioAuthentication)
-  .on('connection', ioConnection);
-
+  io.use(ioAuthentication).on('connection', ioConnection);
 }
 
 function connect() {
