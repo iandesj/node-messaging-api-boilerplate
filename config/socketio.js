@@ -22,8 +22,6 @@ module.exports = {
     const firebaseIdToken = socket.handshake.query.firebaseIdToken;
     const messageThreadEvent = socket.handshake.query.messageThreadEvent;
     if (firebaseIdToken && messageThreadEvent) {
-      if (firebaseIdToken === 'TokenIdAuthTest') next();
-      /*
       firebaseAdmin
         .auth()
         .verifyIdToken(firebaseIdToken)
@@ -35,7 +33,6 @@ module.exports = {
           console.log(error);
           next(new Error('Authentication error'));
         });
-        */
     } else {
       // add block to check if request came from another application
       next(new Error('Authentication error'));
