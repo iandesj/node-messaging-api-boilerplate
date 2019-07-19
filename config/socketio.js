@@ -2,15 +2,15 @@
  * socket.io middleware for authentication on connection to an event
  */
 
-const quoteFirebaseAdmin
- = require('../lib/firebase').initializeQuoteAppFirebaseAdmin();
+const firebaseAdmin
+ = require('../lib/firebase').initializeFirebaseAdmin();
 
 module.exports = {
   authentication: (socket, next) => {
     const firebaseIdToken = socket.handshake.query.firebaseIdToken;
     const messageThreadEvent = socket.handshake.query.messageThreadEvent;
     if (firebaseIdToken && messageThreadEvent) {
-      quoteFirebaseAdmin.auth().verifyIdToken(firebaseIdToken)
+      firebaseAdmin.auth().verifyIdToken(firebaseIdToken)
         .then(decodedToken => {
           next();
         })
@@ -19,7 +19,7 @@ module.exports = {
           next(new Error('Authentication error'));
         });
     } else {
-      // add block to check if request came from OSB and auth OSB on connection
+      // add block to check if request came from another application
       next(new Error('Authentication error'));
     }
   },
