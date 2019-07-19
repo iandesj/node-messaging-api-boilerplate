@@ -18,16 +18,47 @@ module.exports = {
     return io;
   },
   authentication: (socket, next) => {
-    const messageThreadEvent = socket.handshake.query.messageThreadEvent;
+    const query = socket.handshake.query;
+    const auth = query.auth
+      ? query.auth
+          .split(',')
+          .map(param => {
+            return param.split('=');
+          })
+          .reduce((acc, cv) => {
+            return {
+              ...acc,
+              [cv[0]]: cv[1]
+            };
+          }, {})
+      : {};
+
+    // begin onsitebid specific block
+    // if onsitebid config is present, this code block will execute
+    if (config.onSiteBid && auth.email && auth.password) {
+      const authenticateOnSiteBidUser = require('../lib/onsitebid')
+        .authenticateOnSiteBidUser;
+
+      authenticateOnSiteBidUser(auth.email, auth.password)
+        .then(user => {
+          console.info('On-site Bid User Authenticated...', user._id);
+          // DO STUFF HERE
+          next();
+        })
+        .catch(error => {
+          console.error('error', error);
+          next(new Error(error));
+        });
+    }
 
     // begin firebase specific block
     // if a firebase config is present, this code block will execute
-    if (config.firebase) {
+    if (config.firebase && auth.firebaseIdToken) {
       const firebaseAdmin = require('../lib/firebase').initializeFirebaseAdmin();
-      const firebaseIdToken = socket.handshake.query.firebaseIdToken;
+      const firebaseIdToken = auth.firebaseIdToken;
 
       // stubbed out firebase verification block
-      if (firebaseIdToken && messageThreadEvent) {
+      if (firebaseIdToken && query.messageThreadEvent) {
         firebaseAdmin
           .auth()
           .verifyIdToken(firebaseIdToken)
@@ -39,13 +70,14 @@ module.exports = {
             console.log(error);
             next(new Error('Authentication error'));
           });
+        // end firebase specific block
+      } else if (query.messageThreadEvent) {
+        // This block has NO auth, remove in production or any public facing environments
+        next();
+      } else {
+        // add block to check if request came from another application
+        next(new Error('Authentication error'));
       }
-      // end firebase specific block
-    } else if (messageThreadEvent) {
-      next();
-    } else {
-      // add block to check if request came from another application
-      next(new Error('Authentication error'));
     }
   },
   connection: socket => {

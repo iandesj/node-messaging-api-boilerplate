@@ -21,6 +21,9 @@ const io = require('./config/socketio').init(server);
 const ioAuthentication = require('./config/socketio').authentication;
 const ioConnection = require('./config/socketio').connection;
 
+const initializeOnSiteBidConnection = require('./lib/onsitebid')
+  .initializeOnSiteBidConnection;
+
 const mongoose = require('mongoose');
 const passport = require('passport');
 const config = require('./config');
@@ -59,6 +62,10 @@ function listen() {
 
   server.listen(port);
   console.log('Express app started on port ' + port);
+
+  // initialize and connect to onsitebid mongo database
+  initializeOnSiteBidConnection();
+  console.log('On-site Bid Connection Established...');
 
   // socket io auth configuration
   io.use(ioAuthentication).on('connection', ioConnection);
