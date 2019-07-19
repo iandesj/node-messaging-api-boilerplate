@@ -11,13 +11,14 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon server.js",
-    "test": "cross-env NODE_ENV=test babel-tape-runner test/test-*.js | faucet",
+    "test": "cross-env NODE_ENV=test babel-tape-runner test/test-*.js | colortape",
     "pretest": "eslint .",
     "prod": "pm2-runtime start ecosystem.config.js --env production"
   },
   "dependencies": {
     "body-parser": "~1.19.0",
     "co": "~4.6.0",
+    "colortape": "^0.1.2",
     "compression": "~1.7.4",
     "connect-flash": "~0.1.1",
     "connect-mongo": "~2.0.3",
