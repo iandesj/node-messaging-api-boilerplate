@@ -40,7 +40,7 @@ module.exports = {
             next(new Error('Authentication error'));
           });
       }
-    // end firebase specific block
+      // end firebase specific block
     } else if (messageThreadEvent) {
       next();
     } else {
