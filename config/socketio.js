@@ -1,7 +1,7 @@
 /**
  * socket.io middleware for authentication on connection to an event
  */
-const firebaseAdmin = require('../lib/firebase').initializeFirebaseAdmin();
+const config = require('../config');
 
 let io;
 
@@ -18,20 +18,27 @@ module.exports = {
     return io;
   },
   authentication: (socket, next) => {
-    const firebaseIdToken = socket.handshake.query.firebaseIdToken;
     const messageThreadEvent = socket.handshake.query.messageThreadEvent;
-    if (firebaseIdToken && messageThreadEvent) {
-      firebaseAdmin
-        .auth()
-        .verifyIdToken(firebaseIdToken)
-        .then(decodedToken => {
-          console.log('decodedToken', decodedToken);
-          next();
-        })
-        .catch(error => {
-          console.log(error);
-          next(new Error('Authentication error'));
-        });
+
+    if (config.firebase) {
+      const firebaseAdmin = require('../lib/firebase').initializeFirebaseAdmin();
+      const firebaseIdToken = socket.handshake.query.firebaseIdToken;
+
+      if (firebaseIdToken && messageThreadEvent) {
+        firebaseAdmin
+          .auth()
+          .verifyIdToken(firebaseIdToken)
+          .then(decodedToken => {
+            console.log('decodedToken', decodedToken);
+            next();
+          })
+          .catch(error => {
+            console.log(error);
+            next(new Error('Authentication error'));
+          });
+      }
+    } else if (messageThreadEvent) {
+      next();
     } else {
       // add block to check if request came from another application
       next(new Error('Authentication error'));
