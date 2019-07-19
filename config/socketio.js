@@ -23,7 +23,7 @@ module.exports = {
       ? query.auth
           .split(',')
           .map(param => {
-            return param.split('=');
+            return param.split('|');
           })
           .reduce((acc, cv) => {
             return {
