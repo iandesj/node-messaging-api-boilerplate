@@ -1,4 +1,3 @@
-
 /**
  * socket.io middleware for authentication on connection to an event
  */
@@ -7,7 +6,7 @@ const firebaseAdmin = require('../lib/firebase').initializeFirebaseAdmin();
 let io;
 
 module.exports = {
-  init: (server) => {
+  init: server => {
     io = require('socket.io')(server);
     return io;
   },

@@ -4,7 +4,11 @@
  * Module dependencies.
  */
 
+// method call to setup stubs
+
 var test = require('tape');
+setupTestingStubs(test);
+
 const before = test;
 const after = test;
 
@@ -16,7 +20,6 @@ const Message = require('../app/models/messages').Message;
 const Fixtures = {};
 
 // begin test hook configuration
-
 test.onFinish(() => process.exit(0));
 
 test = beforeEach(test, assert => {
@@ -32,7 +35,6 @@ test = beforeEach(test, assert => {
     .then(() => {
       Thread.create(testThread)
         .then(thread => {
-          console.log(thread);
           Fixtures.thread = thread;
         })
         .then(() => assert.end());
@@ -52,7 +54,6 @@ before('Before all tests...', assert => {
 after('After all tests...', assert => {
   assert.end();
 });
-
 // end test hook configuration
 
 test('Messages POST /api/messages', t => {
@@ -250,5 +251,21 @@ function afterEach(test, handler) {
 
       listener(assert);
     });
+  };
+}
+
+function setupTestingStubs(test) {
+  require('../config/socketio').getio = () => {
+    const io = {
+      emit: (eventName, data) => {
+        // test is here to validate that stub was called
+        test(`Socket IO emit stub called on event ${eventName}`, t => {
+          t.equal(true, !!eventName && !!data);
+          t.end();
+        });
+        return;
+      }
+    };
+    return io;
   };
 }
