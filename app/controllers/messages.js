@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const io = require('../../config/socketio').getio();
+
 const Message = mongoose.model('Message');
 const Thread = mongoose.model('Thread');
 
@@ -12,7 +14,6 @@ exports.create = function(req, res) {
   const message = new Message(req.body.message);
   Thread.findById(mongoose.Types.ObjectId(threadId))
     .then(thread => {
-      console.log('thread', thread);
       if (thread) {
         thread.messages.push(message);
         return thread.save();
@@ -22,6 +23,7 @@ exports.create = function(req, res) {
     })
     .then(thread => {
       if (thread) {
+        io.emit(threadId, message);
         res.send({
           threadId: thread._id.toString(),
           messageId: message._id.toString()
