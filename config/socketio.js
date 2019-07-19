@@ -20,10 +20,13 @@ module.exports = {
   authentication: (socket, next) => {
     const messageThreadEvent = socket.handshake.query.messageThreadEvent;
 
+    // begin firebase specific block
+    // if a firebase config is present, this code block will execute
     if (config.firebase) {
       const firebaseAdmin = require('../lib/firebase').initializeFirebaseAdmin();
       const firebaseIdToken = socket.handshake.query.firebaseIdToken;
 
+      // stubbed out firebase verification block
       if (firebaseIdToken && messageThreadEvent) {
         firebaseAdmin
           .auth()
@@ -37,6 +40,7 @@ module.exports = {
             next(new Error('Authentication error'));
           });
       }
+    // end firebase specific block
     } else if (messageThreadEvent) {
       next();
     } else {
